@@ -120,187 +120,213 @@ export default function HomePage() {
   return (
     <>
       <Nav />
-      <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-        <h1 className="mb-2 text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-          Dashboard
-        </h1>
-
-        <div className="mb-8 grid gap-4 sm:grid-cols-3">
-          <StatCard label="Total autores" value={authors.length} />
-          <StatCard label="Total libros" value={totalBooks} />
-          <StatCard
-            label="Promedio libros/autor"
-            value={
-              authors.length
-                ? (totalBooks / authors.length).toFixed(1)
-                : '0'
-            }
-          />
+      <main className="mx-auto min-h-[calc(100vh-65px)] w-full max-w-7xl px-4 py-8 sm:px-8">
+        <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+              Dashboard
+            </h1>
+            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+              Gestión de autores del sistema de biblioteca
+            </p>
+          </div>
+          <div className="grid w-full gap-3 sm:grid-cols-3 lg:w-auto lg:min-w-[480px]">
+            <StatCard label="Total autores" value={authors.length} />
+            <StatCard label="Total libros" value={totalBooks} />
+            <StatCard
+              label="Promedio libros/autor"
+              value={
+                authors.length
+                  ? (totalBooks / authors.length).toFixed(1)
+                  : '0'
+              }
+            />
+          </div>
         </div>
 
         {error && (
-          <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300">
+          <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-300">
             {error}
           </div>
         )}
 
-        <section className="mb-10 rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
-          <h2 className="mb-4 text-lg font-semibold">Crear autor</h2>
-          <form
-            onSubmit={handleCreate}
-            className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
-          >
-            <Input
-              label="Nombre"
-              required
-              value={form.name}
-              onChange={(v) => setForm({ ...form, name: v })}
-            />
-            <Input
-              label="Email"
-              type="email"
-              required
-              value={form.email}
-              onChange={(v) => setForm({ ...form, email: v })}
-            />
-            <Input
-              label="Nacionalidad"
-              value={form.nationality}
-              onChange={(v) => setForm({ ...form, nationality: v })}
-            />
-            <Input
-              label="Año de nacimiento"
-              type="number"
-              value={form.birthYear}
-              onChange={(v) => setForm({ ...form, birthYear: v })}
-            />
-            <div className="sm:col-span-2 lg:col-span-3">
+        <div className="grid gap-6 lg:grid-cols-[minmax(320px,380px)_1fr] lg:items-start">
+          <section className="rounded-xl border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900 lg:sticky lg:top-6">
+            <h2 className="mb-1 text-lg font-semibold">Crear autor</h2>
+            <p className="mb-5 text-sm text-zinc-500">
+              Registra un nuevo autor en la biblioteca
+            </p>
+            <form onSubmit={handleCreate} className="grid gap-4">
+              <Input
+                label="Nombre"
+                required
+                value={form.name}
+                onChange={(v) => setForm({ ...form, name: v })}
+              />
+              <Input
+                label="Email"
+                type="email"
+                required
+                value={form.email}
+                onChange={(v) => setForm({ ...form, email: v })}
+              />
+              <Input
+                label="Nacionalidad"
+                value={form.nationality}
+                onChange={(v) => setForm({ ...form, nationality: v })}
+              />
+              <Input
+                label="Año de nacimiento"
+                type="number"
+                value={form.birthYear}
+                onChange={(v) => setForm({ ...form, birthYear: v })}
+              />
               <Input
                 label="Biografía"
                 value={form.bio}
                 onChange={(v) => setForm({ ...form, bio: v })}
               />
-            </div>
-            <div className="sm:col-span-2 lg:col-span-3">
               <button
                 type="submit"
                 disabled={submitting}
-                className="rounded-lg bg-zinc-900 px-4 py-2 text-sm font-medium text-white hover:bg-zinc-700 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
+                className="w-full rounded-lg bg-zinc-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-zinc-700 disabled:opacity-50 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-zinc-300"
               >
                 {submitting ? 'Guardando...' : 'Crear autor'}
               </button>
+            </form>
+          </section>
+
+          <section className="flex min-h-[420px] flex-col rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
+            <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
+              <div>
+                <h2 className="text-lg font-semibold">Autores</h2>
+                <p className="text-sm text-zinc-500">
+                  {authors.length} registrado{authors.length !== 1 ? 's' : ''}
+                </p>
+              </div>
             </div>
-          </form>
-        </section>
 
-        <section className="rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900">
-          <h2 className="border-b border-zinc-200 px-6 py-4 text-lg font-semibold dark:border-zinc-800">
-            Autores
-          </h2>
-
-          {loading ? (
-            <p className="px-6 py-8 text-center text-zinc-500">Cargando...</p>
-          ) : authors.length === 0 ? (
-            <p className="px-6 py-8 text-center text-zinc-500">
-              No hay autores registrados
-            </p>
-          ) : (
-            <div className="divide-y divide-zinc-200 dark:divide-zinc-800">
-              {authors.map((author) => (
-                <div key={author.id} className="px-6 py-4">
-                  {editingId === author.id ? (
-                    <form onSubmit={handleUpdate} className="grid gap-3 sm:grid-cols-2">
-                      <Input
-                        label="Nombre"
-                        required
-                        value={editForm.name}
-                        onChange={(v) => setEditForm({ ...editForm, name: v })}
-                      />
-                      <Input
-                        label="Email"
-                        type="email"
-                        required
-                        value={editForm.email}
-                        onChange={(v) => setEditForm({ ...editForm, email: v })}
-                      />
-                      <Input
-                        label="Nacionalidad"
-                        value={editForm.nationality}
-                        onChange={(v) =>
-                          setEditForm({ ...editForm, nationality: v })
-                        }
-                      />
-                      <Input
-                        label="Biografía"
-                        value={editForm.bio}
-                        onChange={(v) => setEditForm({ ...editForm, bio: v })}
-                      />
-                      <div className="flex gap-2 sm:col-span-2">
-                        <button
-                          type="submit"
-                          disabled={submitting}
-                          className="rounded-lg bg-zinc-900 px-3 py-1.5 text-sm text-white dark:bg-zinc-100 dark:text-zinc-900"
-                        >
-                          Guardar
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setEditingId(null)}
-                          className="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm dark:border-zinc-700"
-                        >
-                          Cancelar
-                        </button>
-                      </div>
-                    </form>
-                  ) : (
-                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                      <div>
-                        <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">
-                          {author.name}
-                        </h3>
-                        <p className="text-sm text-zinc-500">{author.email}</p>
-                        {author.nationality && (
-                          <p className="text-sm text-zinc-500">
-                            {author.nationality}
-                          </p>
-                        )}
-                        <p className="mt-1 text-xs text-zinc-400">
-                          {author._count?.books ?? 0} libros
-                        </p>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        <Link
-                          href={`/authors/${author.id}`}
-                          className="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
-                        >
-                          Ver detalle
-                        </Link>
-                        <Link
-                          href={`/books?authorName=${encodeURIComponent(author.name)}`}
-                          className="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
-                        >
-                          Ver libros
-                        </Link>
-                        <button
-                          onClick={() => startEdit(author)}
-                          className="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
-                        >
-                          Editar
-                        </button>
-                        <button
-                          onClick={() => handleDelete(author.id, author.name)}
-                          className="rounded-lg border border-red-300 px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950"
-                        >
-                          Eliminar
-                        </button>
-                      </div>
-                    </div>
-                  )}
+            <div className="flex-1 overflow-y-auto">
+              {loading ? (
+                <p className="px-6 py-12 text-center text-zinc-500">
+                  Cargando...
+                </p>
+              ) : authors.length === 0 ? (
+                <p className="px-6 py-12 text-center text-zinc-500">
+                  No hay autores registrados
+                </p>
+              ) : (
+                <div className="grid gap-4 p-4 sm:grid-cols-2 xl:grid-cols-2">
+                  {authors.map((author) => (
+                    <article
+                      key={author.id}
+                      className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800"
+                    >
+                      {editingId === author.id ? (
+                        <form onSubmit={handleUpdate} className="grid gap-3">
+                          <Input
+                            label="Nombre"
+                            required
+                            value={editForm.name}
+                            onChange={(v) =>
+                              setEditForm({ ...editForm, name: v })
+                            }
+                          />
+                          <Input
+                            label="Email"
+                            type="email"
+                            required
+                            value={editForm.email}
+                            onChange={(v) =>
+                              setEditForm({ ...editForm, email: v })
+                            }
+                          />
+                          <Input
+                            label="Nacionalidad"
+                            value={editForm.nationality}
+                            onChange={(v) =>
+                              setEditForm({ ...editForm, nationality: v })
+                            }
+                          />
+                          <Input
+                            label="Biografía"
+                            value={editForm.bio}
+                            onChange={(v) =>
+                              setEditForm({ ...editForm, bio: v })
+                            }
+                          />
+                          <div className="flex gap-2">
+                            <button
+                              type="submit"
+                              disabled={submitting}
+                              className="rounded-lg bg-zinc-900 px-3 py-1.5 text-sm text-white dark:bg-zinc-100 dark:text-zinc-900"
+                            >
+                              Guardar
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setEditingId(null)}
+                              className="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm dark:border-zinc-700"
+                            >
+                              Cancelar
+                            </button>
+                          </div>
+                        </form>
+                      ) : (
+                        <>
+                          <div className="mb-3">
+                            <h3 className="font-semibold text-zinc-900 dark:text-zinc-50">
+                              {author.name}
+                            </h3>
+                            <p className="text-sm text-zinc-500">
+                              {author.email}
+                            </p>
+                            {author.nationality && (
+                              <p className="text-sm text-zinc-500">
+                                {author.nationality}
+                              </p>
+                            )}
+                            <span className="mt-2 inline-block rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
+                              {author._count?.books ?? 0} libros
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            <Link
+                              href={`/authors/${author.id}`}
+                              className="rounded-lg border border-zinc-300 px-2 py-1.5 text-center text-xs hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+                            >
+                              Detalle
+                            </Link>
+                            <Link
+                              href={`/books?authorName=${encodeURIComponent(author.name)}`}
+                              className="rounded-lg border border-zinc-300 px-2 py-1.5 text-center text-xs hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+                            >
+                              Libros
+                            </Link>
+                            <button
+                              onClick={() => startEdit(author)}
+                              className="rounded-lg border border-zinc-300 px-2 py-1.5 text-xs hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+                            >
+                              Editar
+                            </button>
+                            <button
+                              onClick={() =>
+                                handleDelete(author.id, author.name)
+                              }
+                              className="rounded-lg border border-red-300 px-2 py-1.5 text-xs text-red-600 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950"
+                            >
+                              Eliminar
+                            </button>
+                          </div>
+                        </>
+                      )}
+                    </article>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
-          )}
-        </section>
+          </section>
+        </div>
       </main>
     </>
   )
@@ -308,9 +334,9 @@ export default function HomePage() {
 
 function StatCard({ label, value }: { label: string; value: string | number }) {
   return (
-    <div className="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900">
-      <p className="text-sm text-zinc-500">{label}</p>
-      <p className="mt-1 text-3xl font-bold text-zinc-900 dark:text-zinc-50">
+    <div className="rounded-xl border border-zinc-200 bg-white px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900">
+      <p className="text-xs text-zinc-500">{label}</p>
+      <p className="mt-0.5 text-2xl font-bold text-zinc-900 dark:text-zinc-50">
         {value}
       </p>
     </div>
